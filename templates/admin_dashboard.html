@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        body {
+            background: linear-gradient(to right, #e0f7fa, #b9fbc0, #fff59d);
+            margin: 0;
+            height: 100vh;
+        }
+        .container {
+            padding: 20px;
+            background: linear-gradient(135deg, #e0f7fa, #b9fbc0, #fff59d);
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+        .button-group {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 20px;
+        }
+        .button-group a {
+            display: inline-block;
+            padding: 10px 20px;
+            border-radius: 5px;
+            color: #fff;
+            text-decoration: none;
+        }
+        .button-group a.logout {
+            background-color: #dc3545;
+        }
+        .action-button {
+            margin-right: 10px;
+        }
+        .btn-success.accepted {
+            background-color: #d4edda;
+            border-color: #c3e6cb;
+            color: #155724;
+            pointer-events: none;
+        }
+        .search-form {
+            margin-bottom: 20px;
+        }
+    </style>
+    <script>
+        function confirmReject(userId) {
+            if (confirm('Are you sure you want to reject this user?')) {
+                window.location.href = `/admin/reject_user/${userId}`;
+            }
+        }
+    </script>
+</head>
+<body>
+    <div class="container">
+        <div class="button-group">
+            <a href="{{ url_for('admin.logout') }}" class="logout">Logout</a>
+        </div>
+
+        <h2>Admin Dashboard</h2>
+
+        <!-- Search Form -->
+        <form class="search-form" action="{{ url_for('admin.admin_dashboard') }}" method="get">
+            <input type="text" name="search" class="form-control" placeholder="Search by username, name, or email" value="{{ search_query }}">
+            <button type="submit" class="btn btn-primary mt-2">Search</button>
+        </form>
+
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                <div class="alert alert-dismissible fade show" role="alert">
+                    {% for category, message in messages %}
+                        <div class="alert alert-{{ category }}">{{ message }}</div>
+                    {% endfor %}
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+            {% endif %}
+        {% endwith %}
+
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Username</th>
+                    <th>Email</th>
+                    <th>Contact Number</th>
+                    <th>Name</th>
+                    <th>Date of Birth</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for user in users %}
+                <tr>
+                    <td>{{ user.id }}</td>
+                    <td>{{ user.username }}</td>
+                    <td>{{ user.email }}</td>
+                    <td>{{ user.contact_number }}</td>
+                    <td>{{ user.name }}</td>
+                    <td>{{ user.dob }}</td>
+                    <td>
+                        {% if user.accepted %}
+                            <button class="btn btn-success accepted">Accepted</button>
+                        {% else %}
+                            <form action="{{ url_for('admin.accept_user', user_id=user.id) }}" method="post" style="display:inline;">
+                                <button type="submit" class="btn btn-success action-button">Accept</button>
+                            </form>
+                        {% endif %}
+                        <button class="btn btn-danger action-button" onclick="confirmReject('{{ user.id }}')">Reject</button>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

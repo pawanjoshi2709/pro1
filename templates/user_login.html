@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Login</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        body {
+            background: linear-gradient(to right, #e0f7fa, #b9fbc0, #fff59d);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .container {
+            max-width: 500px;
+            padding: 20px;
+            background: linear-gradient(135deg, #e0f7fa, #b9fbc0, #fff59d);
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+        .button-group {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 20px;
+        }
+        .button-group .btn {
+            flex: 1;
+            margin: 0 5px;
+        }
+        .back-button {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            text-decoration: none;
+            font-size: 16px;
+        }
+        .back-button:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>User Login</h1>
+
+        <!-- Display flash messages -->
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                <div class="alert alert-dismissible fade show" role="alert">
+                    {% for category, message in messages %}
+                        <div class="alert alert-{{ category }}">{{ message }}</div>
+                    {% endfor %}
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+            {% endif %}
+        {% endwith %}
+
+        <form action="{{ url_for('user.login') }}" method="post">
+            <div class="form-group">
+                <label for="identifier">Username, Email, or Contact Number:</label>
+                <input type="text" id="identifier" name="identifier" class="form-control" required>
+            </div>
+            <div class="form-group">
+                <label for="password">Password:</label>
+                <input type="password" id="password" name="password" class="form-control" required>
+            </div>
+            <div class="button-group">
+                <button type="submit" class="btn btn-primary">Login</button>
+                <a href="{{ url_for('user.forget_password') }}" class="btn btn-secondary">Forget Password</a>
+            </div>
+        </form>
+    </div>
+
+    <a href="/" class="btn btn-secondary back-button">Back to Home</a>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

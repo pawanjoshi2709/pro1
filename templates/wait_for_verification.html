@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Account Verification</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        body {
+            background: linear-gradient(to right, #e0f7fa, #b9fbc0, #fff59d);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            position: relative; /* For positioning the button at the bottom-right */
+        }
+        .container {
+            max-width: 500px;
+            padding: 20px;
+            background: linear-gradient(135deg, #e0f7fa, #b9fbc0, #fff59d);
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+        .back-button {
+            position: fixed; /* Fixed position for the button */
+            bottom: 20px;
+            right: 20px;
+            background-color: #007bff; /* Blue color */
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            text-decoration: none;
+            font-size: 16px;
+        }
+        .back-button:hover {
+            background-color: #0056b3; /* Darker blue on hover */
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Account Verification</h1>
+        <p>You have to wait for admin to verify your account.</p>
+        <a href="/" class="btn btn-secondary back-button">Back to Home</a>
+    </div>
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

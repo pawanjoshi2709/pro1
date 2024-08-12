@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Video Detection</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        body {
+            background: linear-gradient(to right, #e0f7fa, #b9fbc0, #fff59d);
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            margin: 0;
+        }
+        nav {
+            background-color: #007bff;
+            padding: 10px;
+        }
+        nav ul {
+            list-style: none;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+        }
+        nav ul li {
+            margin: 0 15px;
+        }
+        nav ul li a {
+            color: #fff;
+            text-decoration: none;
+            font-weight: bold;
+        }
+        .container {
+            max-width: 800px;
+            margin: 30px auto;
+            padding: 20px;
+            background: linear-gradient(135deg, #e0f7fa, #b9fbc0, #fff59d);
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+        }
+        .form-group input[type="file"] {
+            display: block;
+            width: 100%;
+        }
+        .form-group button {
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            border: none;
+            border-radius: 4px;
+        }
+        .btn-upload {
+            background-color: #007bff;
+            color: #fff;
+        }
+        .btn-predict {
+            background-color: #28a745;
+            color: #fff;
+        }
+        .btn-download {
+            background-color: #dc3545;
+            color: #fff;
+            display: none; /* Hidden by default */
+        }
+        .message {
+            font-size: 18px;
+            color: #333;
+            margin-top: 20px;
+        }
+        .message.processing {
+            color: #007bff;
+        }
+        .message.complete {
+            color: #28a745;
+        }
+        .message.error {
+            color: #dc3545;
+        }
+    </style>
+</head>
+<body>
+    <nav>
+        <ul>
+            <li><a href="{{ url_for('user.home') }}">Home</a></li>
+            <li><a href="{{ url_for('user.video_detection') }}">Video Detection</a></li>
+            <li><a href="{{ url_for('user.live_video') }}">Live Video</a></li>
+            <li><a href="{{ url_for('user.profile') }}">Profile</a></li>
+        </ul>
+    </nav>
+    <div class="container">
+        <h1>Video Detection</h1>
+        <form id="videoForm" method="POST" enctype="multipart/form-data" action="{{ url_for('user.upload_file') }}">
+            <div class="form-group">
+                <label for="videoFile">Upload Video</label>
+                <input type="file" id="videoFile" name="videoFile" accept="video/*" required>
+            </div>
+            <div class="form-group">
+                <button type="submit" class="btn btn-predict">Predict</button>
+            </div>
+            <div class="message" id="message"></div>
+            <div class="form-group">
+                <a id="downloadButton" class="btn btn-download" href="" download>Download Processed Video</a>
+            </div>
+        </form>
+    </div>
+
+    <script>
+        document.getElementById('videoForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+            
+            const messageElement = document.getElementById('message');
+            const downloadButton = document.getElementById('downloadButton');
+            
+            // Show processing message
+            messageElement.textContent = 'Video processing is starting, you have to wait...';
+            messageElement.className = 'message processing';
+            
+            // Create FormData object for AJAX request
+            const formData = new FormData(this);
+            
+            fetch('{{ url_for("user.upload_file") }}', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    messageElement.textContent = 'Processing complete!';
+                    messageElement.className = 'message complete';
+                    downloadButton.href = data.download_url;  // Set the URL for the processed video
+                    downloadButton.style.display = 'inline-block';
+                } else {
+                    messageElement.textContent = 'Processing failed. Please try again.';
+                    messageElement.className = 'message error';
+                }
+            })
+            .catch(error => {
+                messageElement.textContent = 'An error occurred. Please try again.';
+                messageElement.className = 'message error';
+            });
+        });
+    </script>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

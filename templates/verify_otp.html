@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Verify OTP</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        body {
+            background: linear-gradient(to right, #e0f7fa, #b9fbc0, #fff59d);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .container {
+            max-width: 400px;
+            padding: 20px;
+            background: linear-gradient(135deg, #e0f7fa, #b9fbc0, #fff59d);
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+        .button-group {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 20px;
+        }
+        .back-button {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            text-decoration: none;
+            font-size: 16px;
+        }
+        .back-button:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Verify OTP</h1>
+        <!-- Display flash messages -->
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                <div class="alert alert-dismissible fade show" role="alert">
+                    {% for category, message in messages %}
+                        <div class="alert alert-{{ category }}">{{ message }}</div>
+                    {% endfor %}
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+            {% endif %}
+        {% endwith %}
+        <form action="{{ url_for('user.verify_otp') }}" method="post">
+            <div class="form-group">
+                <label for="otp">Enter OTP:</label>
+                <input type="text" id="otp" name="otp" class="form-control" required>
+            </div>
+            <div class="button-group">
+                <button type="submit" class="btn btn-primary">Verify OTP</button>
+                <button type="button" class="btn btn-secondary" id="resend-otp-btn" disabled>Resend OTP</button>
+            </div>
+        </form>
+    </div>
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script>
+        // Enable the resend OTP button after 2 minutes
+        setTimeout(function() {
+            document.getElementById('resend-otp-btn').disabled = false;
+        }, 120000); // 2 minutes in milliseconds
+    </script>
+</body>
+</html>
